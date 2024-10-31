@@ -15,8 +15,8 @@ class micelio {
     noFill();
 
     beginShape(); // Dibuja la línea usando los puntos guardados
-    for (let point of this.guardaPos) {
-      vertex(point.x, point.y);
+    for (let punto of this.guardaPos) {
+      vertex(punto.x, punto.y);
     }
     endShape();
      stroke(100, 200, 100);
@@ -52,6 +52,7 @@ class micelio {
       this.crearRama(nuevaPos); // Dibuja una ramificación desde la nueva posición
       this.CuentaPresionesDeTecla = 0; // Reinicia el contador
     }
+  
   }
 
   // Función para crear una rama desde la posición dada

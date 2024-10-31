@@ -1,14 +1,13 @@
 class Juego {
   constructor() {
-    this.mice = new micelio(width / 2, height / 2); // Inicia el micelio directamente en el centro
+    this.mice = null; // No se instancia hasta llamar a crearM()
   }
 
   crearM() {
-    this.mice = new micelio(width / 2, height / 2); // Crea un nuevo micelio en el centro
+    this.mice = new micelio(width / 2, height); // Inicia el micelio en el extremo inferior del canvas
   }
 
   dibujar() {
     this.mice.dibujar(); // Dibuja el micelio
-   
   }
 }
