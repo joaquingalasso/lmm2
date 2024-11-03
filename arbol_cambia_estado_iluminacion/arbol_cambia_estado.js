@@ -13,14 +13,13 @@ imgArbIlu =loadImage ('data/arbolCambio.png');
 }
 function setup() {
   
-  createCanvas(1920, 1000 ); 
+  createCanvas(1920, 1080 ); 
   objJuego = new Juego(); // Crea el juego y el micelio inicial
   objJuego.crearM(); // Llamamos al método en el objeto creado
 }
 
 function draw() {
-  
-background(200);
+
   objJuego.cargaPantalla(); // Cargar imagen de fondo según el estado
   objJuego.dibujar();
   objJuego.verificaPosicion(); // Verifica si el micelio ha llegado al borde superior

@@ -27,17 +27,17 @@ class micelio {
     let nuevaPos = { x: ultimaPos.x, y: ultimaPos.y };
 
     if (direccion === 's' || direccion === 'w' || direccion === 'x'|| direccion === 'a'|| direccion === 'q'|| direccion === 'z') {
-      nuevaPos.x -= 15;
+      nuevaPos.x -= 15; //izquierda
     } else if (direccion === 'r' || direccion === 't' || direccion === 'y' || direccion === 'u'|| direccion === 'g'  ||  
     direccion === 'f') {
-      nuevaPos.y -= 15;
+      nuevaPos.y -= 15;//arriba
       
     } else if (direccion === 'k' || direccion === 'l' || direccion === 'o' || direccion === 'i') {
-      nuevaPos.x += 15;
+      nuevaPos.x += 15;//derecha
     } else if (direccion === 'c' || direccion === 'v' || direccion === 'b'|| direccion === 'n' || direccion === 'm') {
-      nuevaPos.y += 15;
+      nuevaPos.y += 15;//abajo
     }
-
+//ramificaciones
     this.guardaPos.push(nuevaPos);
     this.CuentaPresionesDeTecla++;
 
@@ -48,8 +48,8 @@ class micelio {
   }
 
   crearRama(pos) {
-    let direccionX = random([-20, 20]);
-    let direccionY = random([-20, 20]);
+    let direccionX = random([-20, 50]);// modifica tamaño de ramificacion
+    let direccionY = random([-20, 50]);
     let rama = {
       x1: pos.x,
       y1: pos.y,
@@ -59,6 +59,8 @@ class micelio {
     this.ramificaciones.push(rama);
   }
 
+
+//arbol raices cambvia estado iluminado
   llegoAlBordeSuperior() {
     return this.guardaPos[this.guardaPos.length - 1].y <= 0;
   }

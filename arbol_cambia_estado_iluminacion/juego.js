@@ -17,6 +17,8 @@ class Juego {
     this.mice = new micelio(width / 2, height);
   }
 
+
+//dibuja las pantallas(fondos)
   cargaPantalla() {
     if (img[this.estado]) {
       image(img[this.estado], 0, 0);
