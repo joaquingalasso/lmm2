@@ -86,6 +86,7 @@ class Juego {
     if (this.glitch.activar()) {
       // Si hay un glitch activo, verificar si han pasado 20 segundos
       if (millis() - this.glitch.tiempoActivacion > 20000) {
+        //frameCount%60 
         this.perder = true;
         this.estado = 0; // Vuelve a la pantalla inicial
         this.crearM();
@@ -120,5 +121,9 @@ class Juego {
     text("¡Ganaste!", width / 2, height / 2 - 20);
     textSize(16);
     text("Gracias por jugar", width / 2, height / 2 + 20);
+    if (millis() > 5000) {
+      console.log('pasó el tiempo');
+      reiniciarJuego();
+    }
   }
 }

@@ -1,10 +1,11 @@
-
 class micelio {
   constructor(x, y) {
     this.miColor = color(59, 255, 237);
     this.guardaPos = [{ x: x, y: y }];
     this.CuentaPresionesDeTecla = 0;
     this.ramificaciones = [];
+    this.angleChangeAmt = radians(10); // Variación del ángulo
+    this.max_age = 800; // Edad máxima de una rama
   }
 
   dibujar() {
@@ -16,6 +17,7 @@ class micelio {
       vertex(punto.x, punto.y);
     }
     endShape();
+
     stroke(100, 200, 100);
     for (let rama of this.ramificaciones) {
       line(rama.x1, rama.y1, rama.x2, rama.y2);
@@ -25,19 +27,21 @@ class micelio {
   crece(direccion) {
     let ultimaPos = this.guardaPos[this.guardaPos.length - 1];
     let nuevaPos = { x: ultimaPos.x, y: ultimaPos.y };
+    let randomAngle = random(-this.angleChangeAmt, this.angleChangeAmt);
 
     if (direccion === 's' || direccion === 'w' || direccion === 'x'|| direccion === 'a'|| direccion === 'q'|| direccion === 'z') {
-      nuevaPos.x -= 25; //izquierda
+      nuevaPos.x -= 25 * cos(randomAngle); // izquierda con variación de ángulo
+      nuevaPos.y -= 25 * sin(randomAngle);
     } else if (direccion === 'r' || direccion === 't' || direccion === 'y' || direccion === 'u'|| direccion === 'g'  ||  
     direccion === 'f') {
-      nuevaPos.y -= 25;//arriba
-      
+      nuevaPos.y -= 25 * cos(randomAngle); // arriba con variación de ángulo
     } else if (direccion === 'k' || direccion === 'l' || direccion === 'o' || direccion === 'i') {
-      nuevaPos.x += 25;//derecha
+      nuevaPos.x += 25 * cos(randomAngle); // derecha con variación de ángulo
+      nuevaPos.y += 25 * sin(randomAngle);
     } else if (direccion === 'c' || direccion === 'v' || direccion === 'b'|| direccion === 'n' || direccion === 'm') {
-      nuevaPos.y += 25;//abajo
+      nuevaPos.y += 25 * cos(randomAngle); // abajo con variación de ángulo
     }
-//ramificaciones
+
     this.guardaPos.push(nuevaPos);
     this.CuentaPresionesDeTecla++;
 
@@ -48,19 +52,17 @@ class micelio {
   }
 
   crearRama(pos) {
-    let direccionX = random([-20, 50]);// modifica tamaño de ramificacion
+    let direccionX = random([-20, 50]);
     let direccionY = random([-20, 50]);
     let rama = {
       x1: pos.x,
       y1: pos.y,
-      x2: pos.x + direccionX,
-      y2: pos.y + direccionY
+      x2: pos.x + direccionX * cos(this.angleChangeAmt),
+      y2: pos.y + direccionY * sin(this.angleChangeAmt)
     };
     this.ramificaciones.push(rama);
   }
 
-
-//arbol raices cambvia estado iluminado
   llegoAlBordeSuperior() {
     return this.guardaPos[this.guardaPos.length - 1].y <= 0;
   }
@@ -75,7 +77,7 @@ class micelio {
     );
   }
   
-   eliminarZona(x, y, radio) {
+  eliminarZona(x, y, radio) {
     this.guardaPos = this.guardaPos.filter(punto => {
       let distancia = dist(punto.x, punto.y, x, y);
       return distancia > radio;

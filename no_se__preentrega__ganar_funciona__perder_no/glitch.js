@@ -13,6 +13,7 @@ class Glitch {
       this.arbol.estadoArb = 0; // Cambia el estado a glitcheado
       this.activo = true; // Activa el glitch
       this.tiempoActivacion = millis(); // Registra el tiempo de activación
+      //frameCount%60
     }
   }
 

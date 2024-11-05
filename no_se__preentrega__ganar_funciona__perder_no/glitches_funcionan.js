@@ -6,6 +6,8 @@ let imgPasto;
 let cielo;
 let vege;
 let glitch;
+let sonidoAmb;
+let sonidoGlitch;
 
 function preload() {
   img = [
@@ -19,12 +21,13 @@ function preload() {
   imgArb = loadImage('data/arbol1.png');
   imgArbIlu = loadImage('data/arbolCambio.png');
   imgPasto = loadImage('data/pasto.png');
+  //sonidoAmb = loadSound('data/sonidoAmb.wav');
+  //sonidoGlitch = loadSound('sonidoGlitch.mp3');
 }
 
 function setup() {
   createCanvas(1920, 1080);
-  objJuego = new Juego(); // Crea el juego y el micelio inicial
-  objJuego.crearM(); // Llamamos al método en el objeto creado
+  reiniciarJuego(); 
 }
 
 function draw() {
@@ -34,8 +37,19 @@ function draw() {
   objJuego.verificarColisionRaices();
 }
 
+function reiniciarJuego() {
+  objJuego = new Juego(); // Crea el juego y el micelio inicial
+  objJuego.crearM(); // Llamamos al método en el objeto creado
+}
+
 function keyPressed() {
   if (key) {
     objJuego.mice.crece(key); // Llama a crece con la tecla correspondiente
   }
 }
+
+/*
+function mousePressed() {
+  reiniciarJuego();
+}
+*/
