@@ -35,6 +35,7 @@ function draw() {
   objJuego.dibujar();
   objJuego.verificaPosicion(); // Verifica si el micelio ha llegado al borde superior
   objJuego.verificarColisionRaices();
+ objJuego.verificarPerdida();
 }
 
 function reiniciarJuego() {
