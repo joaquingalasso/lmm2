@@ -6,6 +6,7 @@ let glitch;
 let sonidoAmb;
 let sonidoGlitch;
 let gif;
+let rami;
 
 function preload() {
   gif = loadImage('data/signo.gif');
@@ -13,6 +14,7 @@ function preload() {
   glitch = loadImage('data/sombra.gif');
   imgArb = loadImage('data/arb1osc.png');
   imgArbIlu = loadImage('data/arb1ilu.png');
+  rami = loadImage('data/rami.png');
   //sonidoAmb = loadSound('data/sonidoAmb.wav');
   //sonidoGlitch = loadSound('sonidoGlitch.mp3');
 }
