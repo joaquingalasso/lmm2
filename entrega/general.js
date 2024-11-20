@@ -16,12 +16,12 @@ function preload() {
   imgArbIlu = loadImage('data/arb1ilu.png');
   rami = loadImage('data/rami.png');
   //sonidoAmb = loadSound('data/sonidoAmb.wav');
-  //sonidoGlitch = loadSound('sonidoGlitch.mp3');
+  sonidoGlitch = loadSound('data/sonidoGlitch.mp3');
 }
 
 function setup() {
   
-  createCanvas(1850, 950);
+  createCanvas(windowWidth, windowHeight);
   reiniciarJuego(); 
 }
 

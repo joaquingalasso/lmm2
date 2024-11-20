@@ -14,11 +14,11 @@ class Juego {
   }
 
   crearArboles() {
-    // Crear 8 árboles a lo largo del eje x, separados por 210 píxeles
+    // Crear 8 árboles a lo largo del eje x, separados por 160 píxeles
     for (let i = 0; i < 8; i++) {
-      let x = 10 + i * (200 + 10);
-      let y = 0;
-      this.arboles.push(new arbol(x, y));
+      let x = 10 + i * (150 + 10);
+      let y = -80;
+      this.arboles.push(new arbol(x, y, imgArb, imgArbIlu));
     }
   }
 
@@ -30,7 +30,7 @@ class Juego {
     if (this.estado === 0 ) {
       image(fondo, 0, 0, width, height);
       if (this.mice && !this.mice.primeraTecla) {
-        image(gif, width / 2 - 300, 400, 700, 500); // Ajusta posición y tamaño según necesidad
+        image(gif, width / 2, 400, 700, 500); // Ajusta posición y tamaño según necesidad
       }
     } else if (this.estado === 1) {
       this.pantallaGanaste();

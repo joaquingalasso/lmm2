@@ -9,11 +9,13 @@ class micelio {
     this.primeraTecla = false;
     this.cuentaTecla = 1;
       this.estela = []; // Lista para las posiciones del rastro
-  this.maxEstela = 500; // Cantidad máxima de puntos en el rastro
+  this.maxEstela = 250; // Cantidad máxima de puntos en el rastro
   }
 
   dibujar() {
       // Dibuja el rastro primero (se verá detrás)
+      this.tamano = 10 + 5 * sin(frameCount * 0.1); // Oscila entre 30 y 50
+
   this.dibujarEstela();
 
   // Dibuja la luz en la punta
@@ -29,41 +31,47 @@ class micelio {
 
     stroke(100, 200, 100);
     for (let rama of this.ramificaciones) {
-      image(rami, rama.x1, rama.y1, 90, 50);
+      push();
+      
+      image(rami, rama.x1, rama.y1, 45, 45);
+      pop();
     }
   }
   
   dibujarLuz() {
-  // Obtiene la posición actual de la punta del micelio
-  let ultimaPos = this.guardaPos[this.guardaPos.length - 1];
-
-  // Color de la luz
-  fill(255, 255, 200); // Amarillo claro
-  noStroke();
-
-  // Dibuja un círculo amarillo en la punta del micelio
-  ellipse(ultimaPos.x, ultimaPos.y, 40, 40);
-
-  // Agrega la posición actual al rastro
-  this.estela.push({ x: ultimaPos.x, y: ultimaPos.y, alpha: 60 });
-
-  // Limita el tamaño máximo del rastro
-  if (this.estela.length > this.maxEstela) {
-    this.estela.shift(); // Elimina el punto más viejo
+    // Obtiene la posición actual de la punta del micelio
+    let ultimaPos = this.guardaPos[this.guardaPos.length - 1];
+  
+    
+  
+    // Color de la luz
+    fill(255, 255, 150); // Amarillo claro
+    noStroke();
+  
+    // Dibuja un círculo amarillo en la punta del micelio
+    ellipse(ultimaPos.x, ultimaPos.y, this.tamano, this.tamano);
+  
+    // Agrega la posición actual al rastro
+    this.estela.push({ x: ultimaPos.x, y: ultimaPos.y, alpha: 60 });
+  
+    // Limita el tamaño máximo del rastro
+    if (this.estela.length > this.maxEstela) {
+      this.estela.shift(); // Elimina el punto más viejo
+    }
   }
-}
+  
 
 dibujarEstela() {
   for (let i = 0; i < this.estela.length; i++) {
     let punto = this.estela[i];
 
     // Reduce gradualmente la transparencia
-    punto.alpha -= 1;
+    punto.alpha -= 1.5;
 
     // Dibuja cada punto del rastro con transparencia
     fill(255, 255, 200, punto.alpha); // Blanco con un toque de amarillo y transparencia
     noStroke();
-    ellipse(punto.x, punto.y, 35, 35);
+    ellipse(punto.x, punto.y, this.tamano, this.tamano);
 
     // Asegura que la transparencia no sea negativa
     if (punto.alpha < 0) {
@@ -93,12 +101,19 @@ crece(direccion) {
     nuevaPos.y += 20 * cos(randomAngle);
   }
 
- nuevaPos.x = constrain(nuevaPos.x, 0+20, width-20);
- nuevaPos.y = constrain(nuevaPos.y, 270, height);
- this.cuentaTecla++;
+  // Efecto Pacman: paso entre bordes laterales
+  if (nuevaPos.x > width) {
+    nuevaPos.x = 0; // Aparece en el borde izquierdo
+  } else if (nuevaPos.x < 0) {
+    nuevaPos.x = width; // Aparece en el borde derecho
+  }
+
+  // Constrain para las coordenadas verticales
+  nuevaPos.y = constrain(nuevaPos.y, 270, height);
+
+  this.cuentaTecla++;
   this.guardaPos.push(nuevaPos);
   this.CuentaPresionesDeTecla++;
-  
 
   // Crear rama cada 5 movimientos
   if (this.CuentaPresionesDeTecla === 5) {
@@ -106,6 +121,7 @@ crece(direccion) {
     this.CuentaPresionesDeTecla = 0;
   }
 }
+
   crearRama(pos) {
     let direccionX = random([-20, 50]);
     let direccionY = random([-20, 50]);
