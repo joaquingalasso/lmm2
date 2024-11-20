@@ -8,17 +8,16 @@ class Juego {
     this.tiempoIgnorado = 0; // Tiempo ignorado por el jugador
     this.perder = false;
     this.arbolesIluminadosPorGlitch = 0; // Contador de árboles iluminados por glitch
-    this.timer = 15;
-    this.timerCreditos = 5;
-    
+    this.timer = 25;
+    this.timerCreditos = 13;
   }
 
   crearArboles() {
-    // Crear 8 árboles a lo largo del eje x, separados por 160 píxeles
+    // Crear 8 árboles a lo largo del eje x, separados por 210 píxeles
     for (let i = 0; i < 8; i++) {
-      let x = 10 + i * (150 + 10);
-      let y = -80;
-      this.arboles.push(new arbol(x, y, imgArb, imgArbIlu));
+      let x = 10 + i * (200 + 10);
+      let y = 0;
+      this.arboles.push(new arbol(x, y));
     }
   }
 
@@ -30,7 +29,7 @@ class Juego {
     if (this.estado === 0 ) {
       image(fondo, 0, 0, width, height);
       if (this.mice && !this.mice.primeraTecla) {
-        image(gif, width / 2, 400, 700, 500); // Ajusta posición y tamaño según necesidad
+        image(gif, width / 2 - 300, 400, 700, 500); // Ajusta posición y tamaño según necesidad
       }
     } else if (this.estado === 1) {
       this.pantallaGanaste();
@@ -40,18 +39,8 @@ class Juego {
   }
   pantallaGanaste() {
 
-      image(fondo, 0, 0, width, height);
-      fill(255);
-      textAlign(CENTER, CENTER);
-      textSize(32);
-      text("Creditos", width / 2,height / 2 - 200);
-      textSize(16);
-      text("Yamile Nazarena Erbes", width / 2, height / 2 - 150);
-      text("Joaquin Galasso", width / 2, height / 2 - 125);
-      text("Ailen Avanzini", width / 2, height / 2 - 100);
-      text("Zoe Ullua", width / 2, height / 2 - 85);
-      text("Mathilda Esteban", width / 2, height / 2 - 60);
-      text("Agustina Clar", width / 2, height / 2 - 45);
+    image(creditosBien, 0, 0, width, height);
+
 
     // Temporizador para reiniciar el juego después de unos segundos
     if (frameCount % 60 === 0 && this.timer > 0) {
@@ -75,14 +64,14 @@ class Juego {
       if (this.mice) {
         this.mice.dibujar();
       }
-
+      if (this.glitch.activo) {
+        this.glitch.dibujar();
+      }
       for (let arbol of this.arboles) {
         arbol.dibujar();
       }
 
-      if (this.glitch.activo) {
-        this.glitch.dibujar();
-      }
+
 
       // Aquí verificamos la pérdida o el avance del juego
       this.verificarPerdida();
@@ -96,19 +85,45 @@ class Juego {
   verificarColisionRaices() {
     for (let arbol of this.arboles) {
       if (this.mice.colisionaCon(arbol)) {
-        if (this.glitch.activo && arbol === this.glitch.arbol) {
+        if (arbol.estadoArb === 0) { // Si el árbol está glitcheado
           arbol.cambiaEstado();
-          this.glitch.desactivar();
-          this.tiempoIgnorado = 0;
-          this.arbolesIluminadosPorGlitch++;
-          this.timer = 15;
-          this.verificarGanador();
-        } else if (arbol.estadoArb === 0) {
-          arbol.cambiaEstado();
+
+          // Detener el sonido anterior si está sonando
+          if (sonidoActual) {
+            sonidoActual.stop();
+            console.log('Sonido anterior detenido');
+          }
+
+          // Reproducir el nuevo sonido solo si el glitch no está activo
+          if (!this.todosArbolesIluminados()) {
+            let sonidoAleatorio = random(sonido); // `sonido` es tu arreglo de sonidos
+            sonidoAleatorio.play();
+            console.log('Nuevo sonido reproducido');
+
+            // Actualizar el sonido actual
+            sonidoActual = sonidoAleatorio;
+          } else if (this.verificarGanador()) {
+            let sonidoAleatorio = random(sonido); // `sonido` es tu arreglo de sonidos
+            sonidoAleatorio.play();
+            console.log('Nuevo sonido reproducido');
+
+            // Actualizar el sonido actual
+            sonidoActual = sonidoAleatorio;
+          }
+
+          // Si el glitch estaba activo y este era el árbol glitcheado
+          if (this.glitch.activo && arbol === this.glitch.arbol) {
+            this.glitch.desactivar();
+            this.tiempoIgnorado = 0;
+            this.arbolesIluminadosPorGlitch++;
+            this.timer = 25;
+            this.verificarGanador();
+          }
         }
       }
     }
 
+    // Activar el glitch solo si todos los árboles están iluminados y no hay glitch activo
     if (this.todosArbolesIluminados() && !this.glitch.activo) {
       this.glitch.activar(this.arboles);
     }
@@ -124,6 +139,9 @@ class Juego {
         this.timer--;
       }
       if (this.timer === 0) {
+        if (sonidoActual && sonidoActual.isPlaying()) {
+          sonidoActual.stop();
+        }
         console.log('Tiempo agotado, perdiste');
         this.estado = 2; // Cambia al estado de créditos/perdida
         //this.timer = 5; // Establecer un nuevo temporizador para mostrar créditos antes de reiniciar
@@ -132,7 +150,10 @@ class Juego {
   }
 
   verificarGanador() {
-    if (this.arbolesIluminadosPorGlitch >= 1) {
+    if (this.arbolesIluminadosPorGlitch >= 3) {
+      if (glitchS && glitchS.isPlaying()) {
+        glitchS.stop();
+      }
       this.estado = 1; // Cambia al estado de "Ganaste"
     }
   }
@@ -151,26 +172,22 @@ class Juego {
     this.crearArboles(); // Crear nuevos árboles
     this.glitch.desactivar(); // Reiniciar glitch
     this.arbolesIluminadosPorGlitch = 0; // Reiniciar contador
-    this.timer = 15; // Reiniciar temporizador de juego
-    this.timerCreditos = 5; // Reiniciar temporizador de créditos
+    this.timer = 25; // Reiniciar temporizador de juego
+    this.timerCreditos = 13; // Reiniciar temporizador de créditos
     console.log("Juego reiniciado");
+     // Detener todos los sonidos activos
+    if (glitchS && glitchS.isPlaying()) {
+        glitchS.stop();
+    }
+    if (sonidoActual && sonidoActual.isPlaying()) {
+        sonidoActual.stop();
+    }
   }
 
   mostrarCreditos() {
     if (this.estado === 2) { // Estado de créditos o pérdida
-      fill(0);
-      rect(0, 0, width, height);
-      fill(255);
-      textAlign(CENTER, CENTER);
-      textSize(32);
-      text("Creditos", width / 2, height / 2 - 200);
-      textSize(16);
-      text("Yamile Nazarena Erbes", width / 2, height / 2 - 150);
-      text("Joaquin Galasso", width / 2, height / 2 - 125);
-      text("Ailen Avanzini", width / 2, height / 2 - 100);
-      text("Zoe Ullua", width / 2, height / 2 - 85);
-      text("Mathilda Esteban", width / 2, height / 2 - 60);
-      text("Agustina Clar", width / 2, height / 2 - 45);
+
+      image(creditosMal, 0, 0, width, height);
 
       // Temporizador exclusivo para créditos
       if (frameCount % 60 === 0 && this.timerCreditos > 0) {

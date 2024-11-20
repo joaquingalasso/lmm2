@@ -13,7 +13,11 @@ class Glitch {
       this.arbol.estadoArb = 0; // Cambia el estado a glitcheado
       this.activo = true; // Activa el glitch
       this.tiempoActivacion ++; // Registra el tiempo de activación
-      //frameCount%60
+
+        // Reproducir sonido del glitch
+      if (glitchS && !glitchS.isPlaying()) {
+        glitchS.play(); // Inicia el sonido en loop
+      }
     }
   }
 
@@ -21,12 +25,17 @@ class Glitch {
     this.activo = false; // Desactiva el glitch
     this.arbol = null; // Resetea el árbol afectado
     this.tiempoActivacion = 0;
+    
+      // Detener el sonido del glitch
+      if (glitchS && glitchS.isPlaying()) {
+        glitchS.stop();
+      }
   }
 
   dibujar() {
     // Aquí puedes implementar la lógica para dibujar el glitch si es necesario
     if (this.activo && this.arbol) {
-      image(glitch, this.arbol.posicionx+45  , this.arbol.posiciony+20,150,200 );
+      image(glitch, this.arbol.posicionx+130  , this.arbol.posiciony+100,90,150 );
     }
   }
 }

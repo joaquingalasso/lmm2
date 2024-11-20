@@ -1,12 +1,10 @@
 class arbol {
-  constructor(x, y, imgNormal, imgIluminado) {
+  constructor(x, y) {
     this.posicionx = x;
     this.posiciony = y;
-    this.ancho = 150;
+    this.ancho = 300;
     this.alto = 500;
     this.estadoArb = 0; // Estado inicial, sin iluminación
-    this.imgNormal = imgNormal; // Imagen normal (sin iluminar)
-    this.imgIluminado = imgIluminado; // Imagen iluminada
   }
 
   cambiaEstado() {
@@ -15,20 +13,10 @@ class arbol {
 
   dibujar() {
     if (this.estadoArb === 0) {
-      // Dibuja la imagen normal
-      image(this.imgNormal, this.posicionx, this.posiciony, this.ancho, this.alto);
-      if (objJuego.glitch.activo) {
-        image(
-          this.imgNormal,
-          random(this.posicionx, this.posicionx + 10),
-          random(this.posiciony, this.posiciony + 10),
-          this.ancho,
-          this.alto
-        );
-      }
+      image(imgArb, this.posicionx, this.posiciony, this.ancho, this.alto); // Imagen normal
+      if(objJuego.glitch.activo){ image(imgArb, random(this.posicionx,this.posicionx+10),random(this.posiciony,this.posiciony+10), this.ancho, this.alto);}
     } else {
-      // Dibuja la imagen iluminada
-      image(this.imgIluminado, this.posicionx, this.posiciony, this.ancho, this.alto);
+      image(imgArbIlu, this.posicionx, this.posiciony, this.ancho, this.alto); // Imagen iluminada
     }
   }
 }
