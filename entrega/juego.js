@@ -150,7 +150,7 @@ class Juego {
   }
 
   verificarGanador() {
-    if (this.arbolesIluminadosPorGlitch >= 3) {
+    if (this.arbolesIluminadosPorGlitch >= 5) {
       if (glitchS && glitchS.isPlaying()) {
         glitchS.stop();
       }
