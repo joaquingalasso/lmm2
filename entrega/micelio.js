@@ -103,43 +103,37 @@ crece(direccion) {
     this.primeraTecla = true;
   }
 
-  // Inicializar el contador de teclas si no existe
+  // Actualizar contador de tecla
   this.contadorTeclas[direccion] = (this.contadorTeclas[direccion] || 0) + 1;
+
+  // Rotar arrays si la misma tecla se presiona 3 veces
+  if (this.contadorTeclas[direccion] === 3) {
+    //this.rotarArrays();
+    // Reiniciar contadores
+    Object.keys(this.contadorTeclas).forEach(tecla => {
+      this.contadorTeclas[tecla] = 0;
+    });
+  }
 
   let ultimaPos = this.guardaPos[this.guardaPos.length - 1];
   let nuevaPos = { x: ultimaPos.x, y: ultimaPos.y };
   let randomAngle = random(-this.angleChangeAmt, this.angleChangeAmt);
 
-  // Revisar si se presionó la misma tecla 3 veces
-  let sentidoInverso = this.contadorTeclas[direccion] === 3;
-
-  // Movimiento basado en los arrays y sentido inverso
+  // Movimiento basado en los arrays
   if (this.teclasArriba.includes(direccion)) {
-    nuevaPos.y += (sentidoInverso ? 1 : -1) * 20 * cos(randomAngle);
+    nuevaPos.y -= 20 * cos(randomAngle);
   } else if (this.teclasAbajo.includes(direccion)) {
-    nuevaPos.y += (sentidoInverso ? -1 : 1) * 20 * cos(randomAngle);
+    nuevaPos.y += 20 * cos(randomAngle);
   } else if (this.teclasIzquierda.includes(direccion)) {
-    nuevaPos.x += (sentidoInverso ? 1 : -1) * 20 * cos(randomAngle);
-    nuevaPos.y += (sentidoInverso ? 1 : -1) * 20 * sin(randomAngle);
+    nuevaPos.x -= 20 * cos(randomAngle);
+    nuevaPos.y -= 20 * sin(randomAngle);
   } else if (this.teclasDerecha.includes(direccion)) {
-    nuevaPos.x += (sentidoInverso ? -1 : 1) * 20 * cos(randomAngle);
-    nuevaPos.y += (sentidoInverso ? -1 : 1) * 20 * sin(randomAngle);
+    nuevaPos.x += 20 * cos(randomAngle);
+    nuevaPos.y += 20 * sin(randomAngle);
   }
 
-  // Si el usuario alcanza 3 presiones, debe cambiar de tecla
-  if (sentidoInverso) {
-    // Resetear contador de la tecla actual para obligar al cambio
-    this.contadorTeclas[direccion] = 0;
-
-    // Opcional: Mensaje al usuario (si tienes algún sistema de notificaciones)
-    console.log("¡Debes presionar otra tecla para continuar!");
-  }
-
-  // Restringir la posición dentro de los límites
   nuevaPos.x = constrain(nuevaPos.x, 0 + 20, width - 20);
   nuevaPos.y = constrain(nuevaPos.y, 270, height);
-
-  // Actualizar el estado
   this.cuentaTecla++;
   this.guardaPos.push(nuevaPos);
   this.CuentaPresionesDeTecla++;
@@ -150,7 +144,6 @@ crece(direccion) {
     this.CuentaPresionesDeTecla = 0;
   }
 }
-
 
   crearRama(pos) {
     let direccionX = random([-20, 50]);
